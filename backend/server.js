@@ -6,6 +6,7 @@ const dotenv = require('dotenv'); // Import the dotenv package
 dotenv.config();
 const port = process.env.PORT || 3000;
 const userRoutes = require('./routes/userRoutes');
+const appointmentRegistrationRoutes = require('./routes/appointmentResgistrationRoutes');
 
 // mongodb connection
 const mongoose = require('mongoose');
@@ -28,6 +29,8 @@ app.get('/', (req, res) => {
 
 // Use the user routes
 app.use('/users', userRoutes);
+// Use the appointment registration routes
+app.use('/appointments', appointmentRegistrationRoutes);
 
 // example route
 app.post('/data', (req, res) => {
