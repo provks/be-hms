@@ -40,7 +40,8 @@ const getAppointmentRegistrationById = async (req, res) => {
 const updateAppointmentRegistrationById = async (req, res) => {
     try {
         const { id } = req.params;
-        const updatedAppointment = await AppointmentRegistration.findByIdAndUpdate(id, req.body, { new: true });
+        const { status } = req.body;
+        const updatedAppointment = await AppointmentRegistration.findByIdAndUpdate(id, { status }, { returnDocument: 'after', runValidators: true });
         if (!updatedAppointment) {
             return res.status(404).json({ message: 'Appointment registration not found' });
         }
