@@ -7,6 +7,7 @@ dotenv.config();
 const port = process.env.PORT || 3000;
 const userRoutes = require('./routes/userRoutes');
 const appointmentRegistrationRoutes = require('./routes/appointmentResgistrationRoutes');
+const doctorRoutes = require('./routes/doctor.routes');
 
 // mongodb connection
 const mongoose = require('mongoose');
@@ -31,6 +32,8 @@ app.get('/', (req, res) => {
 app.use('/users', userRoutes);
 // Use the appointment registration routes
 app.use('/appointments', appointmentRegistrationRoutes);
+// use the doctor routes
+app.use('/doctors', doctorRoutes);
 
 // example route
 app.post('/data', (req, res) => {
