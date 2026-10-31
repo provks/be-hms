@@ -8,7 +8,7 @@ const appointmentSchema = new mongoose.Schema({
   address: {type: String, required: true},
   description: {type: String, required: true},
   doctorName: {type: String, required: true},
-  status: {type: String, required: true, enum: ['pending', 'confirmed', 'cancelled'], default: 'pending'},
+  status: {type: String, required: true, enum: ['pending', 'confirmed', 'cancelled', 'completed'], default: 'pending'},
   // age: {type: Number},
 });
 

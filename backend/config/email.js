@@ -12,12 +12,12 @@ const transporter = nodemailer.createTransport({
 });
 
 // Function to send welcome email with OTP
-const sendWelcomeEmailWithOTP = async (userEmail, otp) => {
+const sendOTPEmail = async (userEmail, otp) => {
     await transporter.sendMail({
     from: "HMS <varun.sharma@gmail.com>",
     to: userEmail,
-    subject: "Welcome to HMS - Your OTP for Registration",
-    text: `Your OTP for registration is: ${otp}. This OTP is valid for 10 minutes. Please use this code to complete your registration.`,
+    subject: "Welcome to HMS - Your OTP for Admin Login",
+    text: `Your OTP for login is: ${otp}. This OTP is valid for 10 minutes. Please use this code to complete your login.`,
   });
 }
 
@@ -34,5 +34,5 @@ const sendWelcomeEmail = async (to, subject, text) => {
 }
 
 module.exports = {
-  sendWelcomeEmailWithOTP, sendWelcomeEmail
+  sendOTPEmail, sendWelcomeEmail
 };

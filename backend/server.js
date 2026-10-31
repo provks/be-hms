@@ -5,9 +5,10 @@ const dotenv = require('dotenv'); // Import the dotenv package
 // Load environment variables from .env file
 dotenv.config();
 const port = process.env.PORT || 3000;
-const userRoutes = require('./routes/userRoutes');
+const authRoutes = require('./routes/auth.routes');
 const appointmentRegistrationRoutes = require('./routes/appointmentResgistrationRoutes');
 const doctorRoutes = require('./routes/doctor.routes');
+const adminAuthRoutes = require('./routes/adminAuth.routes');
 
 // mongodb connection
 const mongoose = require('mongoose');
@@ -29,11 +30,13 @@ app.get('/', (req, res) => {
 })
 
 // Use the user routes
-app.use('/users', userRoutes);
+app.use('api/auth', authRoutes);
 // Use the appointment registration routes
-app.use('/appointments', appointmentRegistrationRoutes);
+app.use('api/appointments', appointmentRegistrationRoutes);
 // use the doctor routes
-app.use('/doctors', doctorRoutes);
+app.use('api/admin/doctors', doctorRoutes);
+// admin auth
+app.use('/api/adminauth', adminAuthRoutes);
 
 // example route
 app.post('/data', (req, res) => {

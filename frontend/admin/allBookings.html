@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Bookings Page - Healthcare Management System</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+</head>
+<body>
+     <!-- Navbar section -->
+    <nav class="navbar navbar-expand-lg bg-info-subtle">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Healthcare System</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown"
+                aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNavDropdown">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="index.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="profile.html">Profile</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="doctorList.html">Our Doctors</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="bookingAppointment.html">All Bookings</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="logout.html">Sign Up</a>
+                    </li>
+                </ul>
+            </div>
+            <form class="d-flex" role="search">
+                <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" />
+                <button class="btn btn-outline-success" type="submit">Search</button>
+            </form>
+        </div>
+    </nav>
+    
+    <!-- Dashboard section -->
+    <section class="container py-5">
+        <!-- status count section -->
+        <div class="row mb-3">
+            <div class="col-md-3">
+                <div class="alert alert-secondary" role="alert">
+                    <p><strong>Pending:</strong><span id="pendingCount">0</span></p>
+                </div>
+                <div class="alert alert-primary" role="alert">
+                    <p><strong>Confirmed:</strong><span id="confirmedCount">0</span></p>
+                </div>
+                <div class="alert alert-warning" role="alert">
+                    <p><strong>Cancelled:</strong><span id="cancelledCount">0</span></p>
+                </div>
+                <div class="alert alert-success" role="alert">
+                    <p><strong>Completed:</strong><span id="completedCount">0</span></p>
+                </div>
+            </div>
+        </div>
+        <h3>All Bookings</h3>
+        <div class="list-group" id="bookingList">
+            <!-- TODO: add booking list here dynamically -->
+        </div>
+    </section>
+
+    <!-- Script for showing booking data -->
+     <script>
+         const bookings = [
+                {
+                    _id: 1,
+                    name: "Aarav Sharma",
+                    email: "aarav.sharma@example.in",
+                    phone: 919812345678,
+                    dateOfBirth: ISODate('1988-11-20T00:00:00.000+00:00'),
+                    address: "House No. 12, Green Park, South Delhi, Delhi",
+                    description: "Routine check-up for high blood pressure monitoring.",
+                    doctorName: "Dr. Ananya Sharma",
+                    status: "confirmed"
+                },
+                {
+                    _id: 2,
+                    name: "Priya Verma",
+                    email: "priya.verma@example.in",
+                    phone: 919898765432,
+                    dateOfBirth: ISODate('1995-04-10T00:00:00.000+00:00'),
+                    address: "B-45, Connaught Place, Central Delhi, Delhi",
+                    description: "Severe lower back pain after lifting heavy weight.",
+                    doctorName: "Dr. Rajesh Kumar",
+                    status: "pending"
+                },
+                {
+                    _id: 3,
+                    name: "Rohan Kapoor",
+                    email: "rohan.kapoor@example.in",
+                    phone: 919822334455,
+                    dateOfBirth: ISODate('1982-12-05T00:00:00.000+00:00'),
+                    address: "Flat 204, Lotus Towers, Noida, Uttar Pradesh",
+                    description: "Follow-up consultation for post-surgery stitches removal.",
+                    doctorName: "Dr. Gagan Gupta",
+                    status: "completed"
+                },
+                {
+                    _id: 4,
+                    name: "Sneha Patel",
+                    email: "sneha.patel@example.in",
+                    phone: 919871122334,
+                    dateOfBirth: ISODate('1998-09-25T00:00:00.000+00:00'),
+                    address: "Sector 18, Gurgaon, Haryana",
+                    description: "Skin allergy and rashes on arms.",
+                    doctorName: "Dr. Meenakshi Iyer",
+                    status: "cancelled"
+                },
+                {
+                    _id: 5,
+                    name: "Vikram Malhotra",
+                    email: "vikram.m@example.in",
+                    phone: 919844556677,
+                    dateOfBirth: ISODate('1975-03-18T00:00:00.000+00:00'),
+                    address: "C-12, Greater Kailash Part 1, New Delhi, Delhi",
+                    description: "Complaining of persistent dry cough and throat irritation.",
+                    doctorName: "Dr. Ananya Sharma",
+                    status: "confirmed"
+                }
+            ];
+
+            // fucntion render the the booking dynamically
+            function renderBookings(bookings) {
+                const bookingList = document.getElementById('bookingList');
+                const pendingCountElement = document.getElementById('pendingCount');
+                const confirmedCountElement = document.getElementById('confirmedCount');
+                const cancelledCountElement = document.getElementById('cancelledCount');
+                const completedCountElement = document.getElementById('completedCount');
+
+                bookingList.innerHTML = ''; // to clear all the exiting content in the booking list
+
+                // booking status count initialized
+                let pendingCount = 0;
+                let confirmedCount = 0;
+                let cancelledCount = 0;
+                let completedCount = 0;
+
+                bookings.forEach(booking => {
+                    const bookingItem = document.createElement('div');
+                    bookingItem.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'align-items-center');
+                    
+                    bookingItem.innerHTML = `
+                    <div>
+                        <h5 class="mb-1">Booking #${booking._id}</h5>
+                        <p class="mb-1"><strong>Name: </strong> ${booking.name}</p>
+                        <p class="mb-1"><strong>Email: </strong> ${booking.email}</p>
+                        <p class="mb-1"><strong>Phone: </strong> ${booking.phone}</p>
+                        <p class="mb-1"><strong>Date of Birth: </strong> ${new Date(booking.dateOfBirth).toLocaleDateString()}</p>
+                        <p class="mb-1"><strong>Address: </strong> ${booking.address}</p>
+                        <p class="mb-1"><strong>Description: </strong> ${booking.description}</p>
+                        <p class="mb-1"><strong>Doctor: </strong> ${booking.doctorName}</p>
+                    </div>
+                    <div class="ml-4">
+                        <p class="mb-1"><strong>Status: </strong> <span class="badge text-bg-${getStatusBadgeClass(booking.status)}"> ${booking.status} </span></p>
+                        <button class="btn btn-success mr-2" onclick="updateStatus('${booking._id}', 'confirmed')">Confirm</button>
+                        <button class="btn btn-outline-danger" onclick="updateStatus('${booking._id}', 'cancelled')">Cancel</button>
+                    </div>
+                    `;
+
+                    // increment the respective count based on the booking status
+                    if (booking.status == "pending") {
+                        pendingCount++;
+                    } else if (booking.status == "confirmed") {
+                        confirmedCount++;
+                    } else if (booking.status == "cancelled") {
+                        cancelledCount++;
+                    } else if (booking.status == "completed") {
+                        completedCount++;
+                    }
+
+                    // append booking item to booking list element
+                    bookingList.appendChild(bookingItem);
+                })
+
+                // update status counts
+                pendingCountElement.textContent = pendingCount;
+                confirmedCountElement.textContent = confirmedCount;
+                cancelledCountElement.textContent = cancelledCount;
+                completedCountElement.textContent = completedCount;
+
+            };
+            
+            // add appropriate badge class based on status
+            function getStatusBadgeClass(status) {
+                switch(status) {
+                    case 'pending':
+                        return 'secondary'
+                    case 'confirmed':
+                        return 'primary'
+                    case 'cancelled':
+                        return 'warning'
+                    case 'completed':
+                        return 'success'
+                    default: 
+                        return 'secondary'
+                }
+            }
+
+            // render the bookings when the page loads
+            window.onload = function () {
+                renderBookings(bookings);
+            };
+
+     </script>
+
+</body>
+</html>
