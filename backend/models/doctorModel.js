@@ -7,7 +7,7 @@ const doctorSchema = new mongoose.Schema({
     specialization: { type: String, required: true },
     address: { type: String, required: true },
     dateOfBirth: { type: Date, required: true },
-    availability: { type: String, required: true, enum: ['available', 'unavailable', 'onCall'], default: 'available' },
+    availability: { type: String, required: true, enum: ['full-time', 'part-time', 'on-call'], default: 'full-time' },
     degree: { type: String, required: true },
     // age: {type: Number},
 }, { timestamps: true });

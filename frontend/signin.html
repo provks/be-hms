@@ -82,5 +82,38 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.min.js" integrity="sha384-G/EV+4j2dNv+tEPo3++6LCgdCROaejBqfUeNjuKAiuXbjrxilcCdDz6ZAVfHWe1Y" crossorigin="anonymous"></script>
+
+    <script>
+        document.querySelector('#signinForm').addEventListener('submit', async function (event) {
+            event.preventDefault(); // Prevent the default form submission
+            const email = document.getElementById('signinEmail').value;
+            const password = document.getElementById('signinPassword').value;
+
+            try {
+                const response = await fetch('http://localhost:4000/api/auth/signin', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ email, password })
+                });
+
+                if (response.ok) {
+                    // Handle successful sign-in and save token localStorage
+                    const data = await response.json();
+                    localStorage.setItem('token', data.token);
+
+                    // Sign-in successful, redirect to dashboard or profile page
+                    window.location.href = "dashboard.html"; // Redirect to dashboard page
+                } else {
+                    const errorData = await response.json();
+                    alert("Error: " + errorData.message);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert("An error occurred while signing in. Please try again.");
+            }
+        });
+    </script>
   </body>
 </html>

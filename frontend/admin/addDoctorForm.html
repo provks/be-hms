@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doctor Registration Form</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+</head>
+<body>
+    <!-- Navigation Bar -->
+     <nav class="navbar navbar-expand-lg navbar-light bg-danger">
+        <a class="navbar-brand text-white" href="admindashboard.html">ADMIN-DASHBOARD</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link btn btn-light" href="allBookingpage.html">All Bookings</a>
+                </li>
+                <li class="nav-item ml-3">
+                    <button class="nav-link btn btn-primary text-white">Logout</button>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <!-- Doctor Registration Form -->
+    <section class="container py-5">
+        <h1 class="mb-4">Doctor Registration Form</h1>
+        <form id="doctorForm">
+            <!-- name -->
+            <div class="mb-3">
+                <label for="doctorName" class="form-label"><strong>Doctor Name</strong></label>
+                <input type="text" class="form-control" id="doctorName" placeholder="Enter doctor's name" required>
+            </div>
+            <!-- Email -->
+            <div class="mb-3">
+                <label for="doctorEmail" class="form-label"><strong>Email address</strong></label>
+                <input type="email" class="form-control" id="doctorEmail" placeholder="Enter doctor's email" required>
+            </div>
+            <!-- Phone -->
+            <div class="mb-3">
+                <label for="doctorPhoneNumber" class="form-label"><strong>Phone Number</strong></label>
+                <input type="tel" class="form-control" id="doctorPhoneNumber" placeholder="Enter phone number" required>
+            </div>
+            <!-- Specialization -->
+            <div class="mb-3">
+                <label for="doctorSpecialization" class="form-label"><strong>Specialization</strong></label>
+                <input type="text" class="form-control" id="doctorSpecialization" placeholder="Enter specialization" required>
+            </div>
+            <!-- Date of birth -->
+            <div class="mb-3">
+                <label for="doctorDateOfBirth" class="form-label"><strong>Date of Birth</strong></label>
+                <input type="date" class="form-control" id="doctorDateOfBirth" required>
+            </div>
+            <!-- Address -->
+            <div class="mb-3">
+                <label for="doctorAddress" class="form-label"><strong>Address</strong></label>
+                <input type="text" class="form-control" id="doctorAddress" placeholder="Enter address" required>
+            </div>
+            <!-- Availability -->
+            <div class="mb-3">
+                <label for="doctorAvailability" class="form-label"><strong>Availability</strong></label>
+                <select class="form-control" id="doctorAvailability" required>
+                    <option value="">Select availability</option>
+                    <option value="full-time">Full-time</option>
+                    <option value="part-time">Part-time</option>
+                    <option value="on-call">On-call</option>
+                </select>
+            </div>
+
+            <!-- Degree -->
+            <div class="mb-3">
+                <label for="doctorDegree" class="form-label"><strong>Degree</strong></label>
+                <input type="text" class="form-control" id="doctorDegree" placeholder="Enter degree" required>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Register Doctor</button>
+        </form>
+    </section>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.min.js" integrity="sha384-G/EV+4j2dNv+tEPo3++6LCgdCROaejBqfUeNjuKAiuXbjrxilcCdDz6ZAVfHWe1Y" crossorigin="anonymous"></script>
+    
+    <script>
+        // Handle form submission
+        document.getElementById('doctorForm').addEventListener('submit', async function(event) {
+            event.preventDefault();
+            
+            const doctorData = {
+                name: document.getElementById('doctorName').value,
+                email: document.getElementById('doctorEmail').value,
+                phoneNumber: document.getElementById('doctorPhoneNumber').value,
+                specialization: document.getElementById('doctorSpecialization').value,
+                dateOfBirth: document.getElementById('doctorDateOfBirth').value,
+                address: document.getElementById('doctorAddress').value,
+                availability: document.getElementById('doctorAvailability').value,
+                degree: document.getElementById('doctorDegree').value
+            };
+
+            try {
+                const response = await fetch('/api/admin/doctors', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(doctorData)
+                });
+
+                if (response.ok) {
+                    alert('Doctor registered successfully!');
+                    // Optionally, reset the form or redirect
+                    document.getElementById('doctorForm').reset();
+                } else {
+                    const errorData = await response.json();
+                    alert(`Error: ${errorData.message}`);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('An error occurred while registering the doctor. Please try again later.');
+            }
+        });
+    </script>
+</body>
+</html>
