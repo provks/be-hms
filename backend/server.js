@@ -30,11 +30,11 @@ app.get('/', (req, res) => {
 })
 
 // Use the user routes
-app.use('api/auth', authRoutes);
+app.use('/api/auth', authRoutes);
 // Use the appointment registration routes
-app.use('api/appointments', appointmentRegistrationRoutes);
+app.use('/api/appointments', appointmentRegistrationRoutes);
 // use the doctor routes
-app.use('api/admin/doctors', doctorRoutes);
+app.use('/api/admin/doctors', doctorRoutes);
 // admin auth
 app.use('/api/adminauth', adminAuthRoutes);
 
