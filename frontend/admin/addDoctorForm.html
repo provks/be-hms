@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Doctor Registration Form</title>
+    <title>Doctor Registration Form - HMS</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
 </head>
 <body>
     <!-- Navigation Bar -->
-     <nav class="navbar navbar-expand-lg navbar-light bg-danger">
-        <a class="navbar-brand text-white" href="admindashboard.html">ADMIN-DASHBOARD</a>
+     <nav class="navbar navbar-expand-lg navbar-light bg-info-subtle">
+        <a class="navbar-brand" href="admindashboard.html">ADMIN-DASHBOARD</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -17,10 +17,10 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item">
-                    <a class="nav-link btn btn-light" href="allBookingpage.html">All Bookings</a>
+                    <a class="nav-link btn btn-light" href="allBookings.html">All Bookings</a>
                 </li>
                 <li class="nav-item ml-3">
-                    <button class="nav-link btn btn-primary text-white">Logout</button>
+                    <button class="nav-link btn btn-info">Logout</button>
                 </li>
             </ul>
         </div>
@@ -101,7 +101,7 @@
             };
 
             try {
-                const response = await fetch('/api/admin/doctors', {
+                const response = await fetch('http://localhost:4000/api/admin/doctors', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'

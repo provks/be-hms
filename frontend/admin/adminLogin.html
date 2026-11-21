@@ -8,7 +8,7 @@
   </head>
   <body>
     <!-- Navbar section -->
-    <nav class="navbar navbar-expand-lg bg-info-subtle">
+    <nav class="navbar navbar-expand-lg navbar-light bg-info-subtle">
         <div class="container-fluid">
             <a class="navbar-brand" href="#">Healthcare System</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown"
@@ -18,25 +18,10 @@
             <div class="collapse navbar-collapse" id="navbarNavDropdown">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="index.html">Home</a>
+                        <a class="nav-link" href="adminDashboard.html">Dashboard</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Dashboard</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="profile.html">Profile</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="doctorList.html">Our Doctors</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="bookingAppointment.html">Bookings</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="signup.html">Sign Up</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="signin.html">Sign In</a>
+                        <a class="nav-link" href="adminRegister.html">Admin Register</a>
                     </li>
                 </ul>
             </div>
@@ -82,5 +67,72 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.min.js" integrity="sha384-G/EV+4j2dNv+tEPo3++6LCgdCROaejBqfUeNjuKAiuXbjrxilcCdDz6ZAVfHWe1Y" crossorigin="anonymous"></script>
+
+    <script>
+        document.getElementById('getOTPBtn').addEventListener('click', async function () {
+            const email = document.getElementById('email').value;
+            if (!email) {
+                alert('Please enter a valid email');
+                return;
+            }
+
+            // Disable the Get OTP button after it's clicked
+            document.getElementById('getOTPBtn').disabled = true;
+
+            // Make a request to the backend to send the OTP to the provided email
+            try {
+                const response = await fetch("http://localhost:5000/api/adminauth/login", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ email })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    alert('OTP sent to your email!');
+                    // Enable the Login Code input and Submit button
+                    document.getElementById('loginCode').disabled = false;
+                    document.getElementById('submitBtn').disabled = false;
+                } else {
+                    alert(data.error || "Something went wrong!");
+                }
+            } catch (error) {
+                console.error("Error:", error);
+                alert("There was an error while sending the OTP.");
+            }
+        });
+
+        document.getElementById('adminLoginForm').addEventListener('submit', async function (event) {
+            event.preventDefault();
+
+            const email = document.getElementById('email').value;
+            const loginCode = document.getElementById('loginCode').value;
+
+            // Send the email and OTP for verification
+            try {
+                const response = await fetch("http://localhost:5000/api/adminauth/verify-otp", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ email, otp: loginCode })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    console.log(data)
+                    alert('Login successful');
+                    // Store the token in the session storage
+                    sessionStorage.setItem("token", data.token);
+                    window.location.href = "admin-dashboard/admindashboard.html"; // Redirect to the admin dashboard
+                } else {
+                    alert(data.error || "Invalid OTP");
+                }
+            } catch (error) {
+                console.error("Error:", error);
+                alert("There was an error during the verification.");
+            }
+        });
+    </script>
   </body>
 </html>

@@ -7,6 +7,7 @@
     <title>Admin Dashboard - Healthcare Management System</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
 </head>
 
 <body>
@@ -22,10 +23,10 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="#">All Bookings</a>
+                        <a class="nav-link active" aria-current="page" href="allBookings.html">All Bookings</a>
                     </li>
                     <li class="nav-item">
-                        <button class="btn btn-outline-success">Logout</button>
+                        <button class="btn btn-outline-success" onclick="logoutBtn()">Logout</button>
                     </li>
                 </ul>
             </div>
@@ -34,16 +35,113 @@
 
     <!-- Add doctor button -->
     <div class="d-flex justify-content-end mb-4">
-        <button class="btn btn-primary" id="addDoctorButton">
+        <button class="btn btn-primary" id="addDoctorButton" onclick="addDoctor()">
             <!-- TODO: add plus font-awesome icon -->
+            <i class="fas fa-plus"></i>
             Add Doctor
         </button>
     </div>
 
     <!-- Showing doctor cads here: -->
-     <div class="row" id="doctorCardContainer">
+    <div class="row" id="doctorCardsContainer">
         <!-- Add the list here dynamically -->
-     </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+        integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.min.js"
+        integrity="sha384-G/EV+4j2dNv+tEPo3++6LCgdCROaejBqfUeNjuKAiuXbjrxilcCdDz6ZAVfHWe1Y"
+        crossorigin="anonymous"></script>
+    <script>
+        function checkAdminAuth() {
+            const token = sessionStorage.getItem("token"); // Get token from session storage
+            console.log(token)
+            if (!token) {
+                // Redirect to login page if no token found
+                window.location.href = "./adminLogin.html";
+                return;
+            }
+        }
+        checkAdminAuth();
+        // Fetch data from the API and render doctor cards dynamically
+        async function fetchDoctors() {
+            try {
+                const response = await fetch('http://localhost:4000/api/admin/doctors');
+                if (!response.ok) {
+                    throw new Error('Failed to fetch doctors');
+                }
+
+                const doctors = await response.json();
+                console.log(doctors) // Assuming the API returns a JSON array
+                renderDoctorCards(doctors.data);
+            } catch (error) {
+                console.error('Error fetching doctors:', error);
+            }
+        }
+
+        // Render doctor cards
+        function renderDoctorCards(doctors) {
+            const container = document.getElementById('doctorCardsContainer');
+            container.innerHTML = ''; // Clear any existing content
+
+            doctors.forEach(doctor => {
+                const card = document.createElement('div');
+                card.className = 'col-md-4 mb-3';
+                card.innerHTML = `
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="d-flex align-items-center">
+                                    <h5 class="card-title">${doctor.name}</h5>
+                                </div>
+                                <p class="card-text"><strong>Specialty:</strong> ${doctor.specialty}</p>
+                                <p class="card-text"><strong>Available Time:</strong> ${doctor.availability}</p>
+                                <p class="card-text"><strong>Contact:</strong> ${doctor.phonenumber}</p>
+                                 <p class="card-text"><strong>Email:</strong> ${doctor.email}</p>
+                                  <p class="card-text"><strong>Degree:</strong> ${doctor.degree}</p>
+                                   <p class="card-text"><strong>Address:</strong> ${doctor.address}</p>
+                                <button class="btn btn-danger btn-sm" onclick="deleteDoctor('${doctor._id}')"><i class="fas fa-trash-alt"></i> Delete</button>
+                                <button class="btn btn-warning btn-sm" onclick="editDoctor('${doctor._id}')"><i class="fas fa-edit"></i> Edit</button>
+                            </div>
+                        </div>
+                    `;
+                container.appendChild(card);
+
+            });
+        }
+
+        // Call the fetchDoctors function on page load
+        fetchDoctors();
+
+        async function deleteDoctor(id) {
+            console.log(id)
+            const confirmDelete = confirm("Are you sure you want to delete? This action cannot be undone.");
+            if (confirmDelete) {
+                const response = await fetch(`http://localhost:4000/api/admin/doctors/${id}`, {
+                    method: 'DELETE'
+                });
+                const message = await response.json();
+                if (message) {
+                    alert("Doctor deleted successfully.");
+                    fetchDoctors(); // Refresh the doctor list after deletion
+                }
+            }
+        }
+
+        function logoutBtn() {
+            sessionStorage.clear();
+            window.location.href = "./adminLogin.html";
+        }
+
+        function addDoctor() {
+            window.location.href = "./addDoctorForm.html";
+        }
+
+
+    </script>
 </body>
 
 </html>
